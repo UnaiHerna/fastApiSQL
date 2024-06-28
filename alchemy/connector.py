@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "mysql+pymysql://root:Cim12345@localhost/depuradoradb"
+DATABASE_URL = "mysql+pymysql://root:FGV8N9iJ!@localhost/depuradoradb"
 
 
 engine = create_engine(DATABASE_URL)
