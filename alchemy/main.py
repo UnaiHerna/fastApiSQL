@@ -14,6 +14,16 @@ def obtener_usuarios(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener usuarios: {str(e)}")
 
+
+@app.get("/maquinas/")
+def obtener_maquinas(db: Session = Depends(get_db)):
+    try:
+        maquinas = db.query(Maquina).all()
+        return {"maquinas": maquinas}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al obtener maquinas: {str(e)}")
+
+
 @app.get("/samples10/")
 def obtener_samples_altos(db: Session = Depends(get_db)):
     try:
@@ -56,6 +66,7 @@ def obtener_samples_altos(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener datos: {str(e)}")
 
+
 @app.post("/samples/")
 def crear_sample(db: Session = Depends(get_db)):
     try:
@@ -66,3 +77,17 @@ def crear_sample(db: Session = Depends(get_db)):
         return {"message": "Sample creado exitosamente", "sample": nuevo_sample}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al crear sample: {str(e)}")
+
+
+@app.put("/samples/{sample_id}")
+def actualizar_valor_sample(sample_id: int, valor:float ,db: Session = Depends(get_db)):
+    try:
+        sample = db.query(Sample).filter(Sample.id == sample_id).first()
+        if sample is None:
+            raise HTTPException(status_code=404, detail="Sample no encontrado")
+        sample.valor = valor
+        db.commit()
+        db.refresh(sample)
+        return {"message": "Sample actualizado exitosamente", "sample": sample}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al actualizar sample: {str(e)}")
